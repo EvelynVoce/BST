@@ -547,156 +547,156 @@ BOOST_AUTO_TEST_SUITE_END()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////
-
-BOOST_AUTO_TEST_SUITE(Move_Constructor_Tests)
-
-BOOST_AUTO_TEST_CASE(MoveConstructorFullyMoves)
-{
-    Dict dict1;
-    insertTestData(dict1);
-
-    Dict dict2(std::move(dict1));
-
-    isPresent(dict2, 22, "Mary");
-    isPresent(dict2, 4, "Stephen");
-    isPresent(dict2, 9, "Edward");
-    isPresent(dict2, 1, "William");
-    isPresent(dict2, 0, "Harold");
-    isPresent(dict2, 24, "James");
-    isPresent(dict2, 26, "Charles");
-    isPresent(dict2, 19, "Henry");
-    isPresent(dict2, 31, "Anne");
-    isPresent(dict2, 23, "Elizabeth");
-    isPresent(dict2, 37, "Victoria");
-    isPresent(dict2, 42, "Elizabeth");
-    isPresent(dict2, -1, "Edward");
-}
-
-BOOST_AUTO_TEST_CASE(MoveConstructorSteals)
-{
-    Dict* dictPtr;
-    {
-        Dict dict1;
-        insertTestData(dict1);
-
-        dictPtr = new Dict(std::move(dict1));
-
-        isAbsent(dict1, 22);
-        isAbsent(dict1, 4);
-        isAbsent(dict1, 9);
-        isAbsent(dict1, 1);
-        isAbsent(dict1, 0);
-        isAbsent(dict1, 24);
-        isAbsent(dict1, 26);
-        isAbsent(dict1, 19);
-        isAbsent(dict1, 31);
-        isAbsent(dict1, 23);
-        isAbsent(dict1, 37);
-        isAbsent(dict1, 42);
-        isAbsent(dict1, -1);
-
-        // dict1 gets deleted here
-    }
-
-    isPresent(*dictPtr, 22, "Mary");
-    isPresent(*dictPtr, 4, "Stephen");
-    isPresent(*dictPtr, 9, "Edward");
-    isPresent(*dictPtr, 1, "William");
-    isPresent(*dictPtr, 0, "Harold");
-    isPresent(*dictPtr, 24, "James");
-    isPresent(*dictPtr, 26, "Charles");
-    isPresent(*dictPtr, 19, "Henry");
-    isPresent(*dictPtr, 31, "Anne");
-    isPresent(*dictPtr, 23, "Elizabeth");
-    isPresent(*dictPtr, 37, "Victoria");
-    isPresent(*dictPtr, 42, "Elizabeth");
-    isPresent(*dictPtr, -1, "Edward");
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//
+//BOOST_AUTO_TEST_SUITE(Move_Constructor_Tests)
+//
+//BOOST_AUTO_TEST_CASE(MoveConstructorFullyMoves)
+//{
+//    Dict dict1;
+//    insertTestData(dict1);
+//
+//    Dict dict2(std::move(dict1));
+//
+//    isPresent(dict2, 22, "Mary");
+//    isPresent(dict2, 4, "Stephen");
+//    isPresent(dict2, 9, "Edward");
+//    isPresent(dict2, 1, "William");
+//    isPresent(dict2, 0, "Harold");
+//    isPresent(dict2, 24, "James");
+//    isPresent(dict2, 26, "Charles");
+//    isPresent(dict2, 19, "Henry");
+//    isPresent(dict2, 31, "Anne");
+//    isPresent(dict2, 23, "Elizabeth");
+//    isPresent(dict2, 37, "Victoria");
+//    isPresent(dict2, 42, "Elizabeth");
+//    isPresent(dict2, -1, "Edward");
+//}
+//
+//BOOST_AUTO_TEST_CASE(MoveConstructorSteals)
+//{
+//    Dict* dictPtr;
+//    {
+//        Dict dict1;
+//        insertTestData(dict1);
+//
+//        dictPtr = new Dict(std::move(dict1));
+//
+//        isAbsent(dict1, 22);
+//        isAbsent(dict1, 4);
+//        isAbsent(dict1, 9);
+//        isAbsent(dict1, 1);
+//        isAbsent(dict1, 0);
+//        isAbsent(dict1, 24);
+//        isAbsent(dict1, 26);
+//        isAbsent(dict1, 19);
+//        isAbsent(dict1, 31);
+//        isAbsent(dict1, 23);
+//        isAbsent(dict1, 37);
+//        isAbsent(dict1, 42);
+//        isAbsent(dict1, -1);
+//
+//        // dict1 gets deleted here
+//    }
+//
+//    isPresent(*dictPtr, 22, "Mary");
+//    isPresent(*dictPtr, 4, "Stephen");
+//    isPresent(*dictPtr, 9, "Edward");
+//    isPresent(*dictPtr, 1, "William");
+//    isPresent(*dictPtr, 0, "Harold");
+//    isPresent(*dictPtr, 24, "James");
+//    isPresent(*dictPtr, 26, "Charles");
+//    isPresent(*dictPtr, 19, "Henry");
+//    isPresent(*dictPtr, 31, "Anne");
+//    isPresent(*dictPtr, 23, "Elizabeth");
+//    isPresent(*dictPtr, 37, "Victoria");
+//    isPresent(*dictPtr, 42, "Elizabeth");
+//    isPresent(*dictPtr, -1, "Edward");
+//}
+//
+//BOOST_AUTO_TEST_SUITE_END()
 
 ////////////////////////////////////////////////////////////////////////////////
-
-BOOST_AUTO_TEST_SUITE(Move_Assignment_Tests)
-
-BOOST_AUTO_TEST_CASE(MoveAssignmentFullyMoves)
-{
-    Dict dict1;
-    insertTestData(dict1);
-
-    Dict dict2;
-    dict2 = std::move(dict1);
-
-    isPresent(dict2, 22, "Mary");
-    isPresent(dict2, 4, "Stephen");
-    isPresent(dict2, 9, "Edward");
-    isPresent(dict2, 1, "William");
-    isPresent(dict2, 0, "Harold");
-    isPresent(dict2, 24, "James");
-    isPresent(dict2, 26, "Charles");
-    isPresent(dict2, 19, "Henry");
-    isPresent(dict2, 31, "Anne");
-    isPresent(dict2, 23, "Elizabeth");
-    isPresent(dict2, 37, "Victoria");
-    isPresent(dict2, 42, "Elizabeth");
-    isPresent(dict2, -1, "Edward");
-}
-
-BOOST_AUTO_TEST_CASE(MoveAssignmentOverwrites)
-{
-    Dict dict1;
-    insertTestData(dict1);
-
-    Dict dict2;
-    dict2.insert(22, "Jane");
-    dict2.insert(2, "William");
-
-    dict1 = std::move(dict2);
-
-    isAbsent(dict1, 4);
-    isAbsent(dict1, 9);
-    isAbsent(dict1, 1);
-    isAbsent(dict1, 0);
-    isAbsent(dict1, 24);
-    isAbsent(dict1, 26);
-    isAbsent(dict1, 19);
-    isAbsent(dict1, 31);
-    isAbsent(dict1, 23);
-    isAbsent(dict1, 37);
-    isAbsent(dict1, 42);
-    isAbsent(dict1, -1);
-
-    isPresent(dict1, 2, "William");
-}
-
-BOOST_AUTO_TEST_CASE(MoveAssignmentIsNotShallowCopy)
-{
-    Dict dict1;
-    insertTestData(dict1);
-
-    Dict dict2;
-    dict2 = std::move(dict1);
-
-    dict1.remove(19);
-    dict1.remove(23);
-    isPresent(dict2, 19, "Henry");
-    isPresent(dict2, 23, "Elizabeth");
-}
-
-BOOST_AUTO_TEST_CASE(MoveSelfAssignment)
-{
-    Dict dict;
-    insertTestData(dict);
-
-    dict = std::move(dict);
-
-    isPresent(dict, 24, "James");
-    isPresent(dict, 26, "Charles");
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-////////////////////////////////////////////////////////////////////////////////
+//
+//////////////////////////////////////////////////////////////////////////////////
+//
+//BOOST_AUTO_TEST_SUITE(Move_Assignment_Tests)
+//
+//BOOST_AUTO_TEST_CASE(MoveAssignmentFullyMoves)
+//{
+//    Dict dict1;
+//    insertTestData(dict1);
+//
+//    Dict dict2;
+//    dict2 = std::move(dict1);
+//
+//    isPresent(dict2, 22, "Mary");
+//    isPresent(dict2, 4, "Stephen");
+//    isPresent(dict2, 9, "Edward");
+//    isPresent(dict2, 1, "William");
+//    isPresent(dict2, 0, "Harold");
+//    isPresent(dict2, 24, "James");
+//    isPresent(dict2, 26, "Charles");
+//    isPresent(dict2, 19, "Henry");
+//    isPresent(dict2, 31, "Anne");
+//    isPresent(dict2, 23, "Elizabeth");
+//    isPresent(dict2, 37, "Victoria");
+//    isPresent(dict2, 42, "Elizabeth");
+//    isPresent(dict2, -1, "Edward");
+//}
+//
+//BOOST_AUTO_TEST_CASE(MoveAssignmentOverwrites)
+//{
+//    Dict dict1;
+//    insertTestData(dict1);
+//
+//    Dict dict2;
+//    dict2.insert(22, "Jane");
+//    dict2.insert(2, "William");
+//
+//    dict1 = std::move(dict2);
+//
+//    isAbsent(dict1, 4);
+//    isAbsent(dict1, 9);
+//    isAbsent(dict1, 1);
+//    isAbsent(dict1, 0);
+//    isAbsent(dict1, 24);
+//    isAbsent(dict1, 26);
+//    isAbsent(dict1, 19);
+//    isAbsent(dict1, 31);
+//    isAbsent(dict1, 23);
+//    isAbsent(dict1, 37);
+//    isAbsent(dict1, 42);
+//    isAbsent(dict1, -1);
+//
+//    isPresent(dict1, 2, "William");
+//}
+//
+//BOOST_AUTO_TEST_CASE(MoveAssignmentIsNotShallowCopy)
+//{
+//    Dict dict1;
+//    insertTestData(dict1);
+//
+//    Dict dict2;
+//    dict2 = std::move(dict1);
+//
+//    dict1.remove(19);
+//    dict1.remove(23);
+//    isPresent(dict2, 19, "Henry");
+//    isPresent(dict2, 23, "Elizabeth");
+//}
+//
+//BOOST_AUTO_TEST_CASE(MoveSelfAssignment)
+//{
+//    Dict dict;
+//    insertTestData(dict);
+//
+//    dict = std::move(dict);
+//
+//    isPresent(dict, 24, "James");
+//    isPresent(dict, 26, "Charles");
+//}
+//
+//BOOST_AUTO_TEST_SUITE_END()
+//
+//////////////////////////////////////////////////////////////////////////////////

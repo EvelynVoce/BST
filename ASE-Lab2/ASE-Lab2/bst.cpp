@@ -72,6 +72,7 @@ void BST::displayTreeRec(Node*& currentNode, int depth)
     std::string tabs;
     for (size_t i = 0; i < depth; ++i) tabs += "\t";
     std::cout << tabs << currentNode->key << std::endl;
+
     if (!isLeaf(currentNode->leftChild)) displayTreeRec(currentNode->leftChild, depth + 1);
     if (!isLeaf(currentNode->rightChild)) displayTreeRec(currentNode->rightChild, depth + 1);
 }
@@ -110,44 +111,40 @@ void BST::remove(KeyType key_to_remove)
     removeRec(root, key_to_remove);
 }
 
-BST::Node* BST::removeRec(Node*& currentNode, KeyType k)
+void BST::removeRec(Node*& currentNode, KeyType k)
 {
-    if (isLeaf(currentNode)) return root;
-
+    if (isLeaf(currentNode)) return;
     if (currentNode->key == k) {
-
+        
         if (isLeaf(currentNode->leftChild) && isLeaf(currentNode->rightChild)) {
-            delete currentNode->leftChild;
-            delete currentNode->rightChild;
+            delete currentNode;
             currentNode = leaf();
         }
 
-        else if (isLeaf(currentNode->leftChild) && !isLeaf(currentNode->rightChild)) {
-            delete currentNode->leftChild;
+        else if (isLeaf(currentNode->leftChild)) {
+            Node* temp = currentNode;
             currentNode = currentNode->rightChild;
-            delete currentNode->rightChild;
+            delete temp;
         }
 
-        else if (!isLeaf(currentNode->leftChild) && isLeaf(currentNode->rightChild)) {
-            delete currentNode->rightChild;
+        else if (isLeaf(currentNode->rightChild)) {
+            Node* temp = currentNode;
             currentNode = currentNode->leftChild;
-            delete currentNode->leftChild;
+            delete temp;
         }
 
         else if (!isLeaf(currentNode->leftChild) && !isLeaf(currentNode->rightChild)) {
+
             Node* minimumNode = detachMinimumNode(currentNode->rightChild);
             currentNode->key = minimumNode->key;
             currentNode->item = minimumNode->item;
-           
+
             if (!isLeaf(minimumNode->rightChild)) {
-                Node* temp = minimumNode;
+                minimumNode = minimumNode->rightChild;
                 delete minimumNode->rightChild;
-                minimumNode = temp->rightChild;
-                delete temp;
             }
         }
     }
-
     else if (currentNode->key > k) removeRec(currentNode->leftChild, k);
     else if (currentNode->key < k) removeRec(currentNode->rightChild, k);
 }
@@ -162,12 +159,13 @@ BST::~BST()
 }
 
 
-void BST::deepDelete(Node*& currentNode)
+void BST::deepDelete(Node* currentNode)
 {
     if (isLeaf(currentNode)) return;
-    if (!isLeaf(currentNode->leftChild)) deepDelete(currentNode->leftChild);
-    if (!isLeaf(currentNode->rightChild)) deepDelete(currentNode->rightChild);
+    deepDelete(currentNode->leftChild);
+    deepDelete(currentNode->rightChild);
     delete currentNode;
+    currentNode = leaf();
 }
 
 BST::BST(const BST& bstToCopy)
@@ -240,7 +238,7 @@ void BST::rotateLeft(Node*& localRoot)
     assert(!isLeaf(b));
     Node* beta = b->leftChild;
 
-    //Right rotation
+    //Left rotation
     localRoot->rightChild = beta;
     b->leftChild = localRoot;
     localRoot = b;
