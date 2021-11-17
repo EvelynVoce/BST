@@ -12,7 +12,7 @@
 #include "bst.h"
 
 
-using Dict = BST;
+using Dict = BST<int, std::string>;
 using KeyType = Dict::KeyType;
 using ItemType = Dict::ItemType;
 
