@@ -41,6 +41,7 @@ private:
     void insertRec(KeyType, ItemType, Node*&);
     void displayEntriesRec(Node*&);
     void removeRec(Node*&, KeyType);
+    void removeIfRec(std::function<bool(KeyType)>, Node*&);
     Node* detachMinimumNode(Node*&);
     void deepDelete(Node*); // recursive worker performing deep delete
     Node* deepCopy(Node*);
@@ -208,8 +209,16 @@ void BST<K, I>::removeRec(Node*& currentNode, KeyType k)
 }
 
 template<typename K, typename I>
-void BST<K, I>::removeIf(std::function<bool(KeyType)>) {
+void  BST<K, I>::removeIf(std::function<bool(KeyType)> condition) {
+    removeIfRec(condition, root);
+}
 
+template<typename K, typename I>
+void BST<K, I>::removeIfRec(std::function<bool(KeyType)> condition, Node*& currentNode) {
+    if (isLeaf(currentNode)) return;
+    if (!isLeaf(currentNode->leftChild)) removeIfRec(condition, currentNode->leftChild);
+    if (!isLeaf(currentNode->rightChild)) removeIfRec(condition, currentNode->rightChild);
+    if (condition(currentNode->key)) remove(currentNode->key);
 }
 
 template<typename K, typename I>
@@ -328,5 +337,75 @@ void BST<K, I>::rotateLeft(Node*& localRoot)
 //        }
 //    }
 //}
+
+
+/*
+
+template<typename K, typename I>
+class HashTable
+{
+public:
+    using KeyType = std::string;
+    using ItemType = std::string;
+
+    struct Node;
+    HashTable();
+
+    void insert(KeyType, ItemType);
+    ItemType* lookup(KeyType);
+    void remove(KeyType);
+
+private:
+    unsigned int hash(KeyType);
+    void removeRec(Node*&, KeyType);
+};
+
+template<typename K, typename I>
+void HashTable<K, I>::remove(KeyType key_to_remove)
+{
+    removeRec(root, key_to_remove);
+}
+
+template<typename K, typename I>
+void HashTable<K, I>::removeRec(Node*& currentNode, KeyType k)
+{
+    if (isLeaf(currentNode)) return;
+    if (currentNode->key == k) {
+
+        if (isLeaf(currentNode->leftChild) && isLeaf(currentNode->rightChild)) {
+            delete currentNode;
+            currentNode = leaf();
+        }
+
+        else if (isLeaf(currentNode->leftChild)) {
+            Node* temp = currentNode;
+            currentNode = currentNode->rightChild;
+            delete temp;
+        }
+
+        else if (isLeaf(currentNode->rightChild)) {
+            Node* temp = currentNode;
+            currentNode = currentNode->leftChild;
+            delete temp;
+        }
+
+        else if (!isLeaf(currentNode->leftChild) && !isLeaf(currentNode->rightChild)) {
+
+            Node* minimumNode = detachMinimumNode(currentNode->rightChild);
+            currentNode->key = minimumNode->key;
+            currentNode->item = minimumNode->item;
+
+            if (!isLeaf(minimumNode->rightChild)) {
+                minimumNode = minimumNode->rightChild;
+                delete minimumNode->rightChild;
+            }
+        }
+    }
+    else if (currentNode->key > k) removeRec(currentNode->leftChild, k);
+    else if (currentNode->key < k) removeRec(currentNode->rightChild, k);
+}
+
+*/
+
 
 #endif BST_H
